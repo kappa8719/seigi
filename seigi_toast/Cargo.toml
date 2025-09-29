@@ -2,5 +2,9 @@
 name = "seigi_toast"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+description = "Unstyled toast components for web"
+homepage = "https://github.com/kappa8719/seigi/seigi_toast"
+repository = "https://github.com/kappa8719/seigi"
 
 [dependencies]
