@@ -1,0 +1,12 @@
+[build]
+target = "index.html"
+
+[watch]
+watch = ["."]
+
+[serve]
+port = 1430
+open = false
+
+[tools]
+tailwindcss = "4.1.13"
