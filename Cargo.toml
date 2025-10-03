@@ -15,6 +15,7 @@ members = ["seigi_toast"]
 web-sys = "0.3"
 js-sys = "0.3"
 wasm-bindgen = "0.2"
+seigi_toast = { path = "seigi_toast", version = "0.1.0 "}
 
 [dependencies]
-seigi_toast = { path = "seigi_toast", version = "0.1.0" }
+seigi_toast.workspace = true
