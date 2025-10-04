@@ -1,0 +1,21 @@
+[data-seigi-toaster] {
+  position: fixed;
+  width: attr(data-width, 300px);
+  bottom: 24px;
+  right: 24px;
+  z-index: 999999999;
+}
+
+[data-seigi-toast] {
+  position: absolute;
+  padding: 16px;
+  width: attr(data-width, 300px);
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid oklch(98.462% 0.001 247.838);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  bottom: 0;
+}

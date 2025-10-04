@@ -11,4 +11,5 @@ repository = "https://github.com/kappa8719/seigi"
 web-sys.workspace = true
 js-sys.workspace = true
 wasm-bindgen.workspace = true
-
+gloo.workspace = true
+parking_lot = { version = "0.12.5", features = ["nightly"] }
