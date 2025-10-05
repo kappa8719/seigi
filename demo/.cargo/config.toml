@@ -1,2 +1,5 @@
 [build]
-rustflags = ["--cfg=web_sys_unstable_apis"]
+rustflags = ["--cfg=web_sys_unstable_apis", "-C", "target-feature=+atomics"]
+
+[unstable]
+build-std = ["panic_abort", "std"]

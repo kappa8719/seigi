@@ -2,7 +2,7 @@
 target = "index.html"
 
 [watch]
-watch = ["."]
+watch = [".."]
 
 [serve]
 port = 1430
