@@ -1,5 +1,6 @@
 use std::{
     collections::HashMap,
+    rc::Rc,
     sync::{
         Arc,
         atomic::{AtomicU64, Ordering},
@@ -15,7 +16,6 @@ struct EventSubscriber {
     handle: u64,
 }
 
-/// Actual implementation of toaster
 struct State {
     toasts: HashMap<ToastHandle, Toast>,
     sequence: u32,
@@ -29,11 +29,7 @@ impl State {
         }
     }
 
-    pub fn get(&self, handle: ToastHandle) -> Option<&Toast> {
-        self.toasts.get(&handle)
-    }
-
-    pub fn get_mut(&mut self, handle: ToastHandle) -> Option<&mut Toast> {
+    pub fn get(&mut self, handle: ToastHandle) -> Option<&mut Toast> {
         self.toasts.get_mut(&handle)
     }
 }
@@ -67,20 +63,20 @@ impl Observer {
 #[derive(Clone)]
 pub struct Toaster {
     state: Arc<Mutex<State>>,
-    observer: Arc<RwLock<Observer>>,
+    observer: Rc<RwLock<Observer>>,
 }
 
 impl Toaster {
     pub fn new() -> Toaster {
         Self {
             state: Arc::new(Mutex::new(State::new())),
-            observer: Arc::new(RwLock::new(Observer::default())),
+            observer: Rc::new(RwLock::new(Observer::default())),
         }
     }
 
     pub fn get(&self, handle: ToastHandle) -> Option<MappedMutexGuard<'_, Toast>> {
         let state = self.state.lock();
-        MutexGuard::try_map(state, |v| v.get_mut(handle)).ok()
+        MutexGuard::try_map(state, |v| v.get(handle)).ok()
     }
 
     /// Add toast to state

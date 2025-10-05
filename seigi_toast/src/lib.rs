@@ -9,7 +9,7 @@ pub use toaster::*;
 use wasm_bindgen::JsCast;
 use web_sys::{HtmlElement, HtmlStyleElement};
 
-use crate::renderer::create_renderer;
+use crate::renderer::{RendererOptions, create_renderer};
 
 thread_local! {
     static GLOBAL_TOASTS: OnceCell<Toaster> = OnceCell::new();
@@ -52,7 +52,7 @@ pub fn initialize_global() {
             .unwrap()
             .unchecked_into::<HtmlElement>();
         body().append_child(container.unchecked_ref()).unwrap();
-        create_renderer(toaster, container);
+        create_renderer(toaster, container, RendererOptions::default());
     });
 }
 
@@ -69,6 +69,6 @@ pub fn create_toast(toast: impl Into<Toast>) -> ToastHandle {
 ///
 /// # Returns
 /// True if toast has been set to be dismissed, false if no toast of handle was found
-pub fn dismiss_toast(handle: ToastHandle, reason: DismissReason) -> bool {
-    global().dismiss_toast(handle, reason)
+pub fn dismiss_toast(handle: ToastHandle) -> bool {
+    global().dismiss_toast(handle, DismissReason::User)
 }
