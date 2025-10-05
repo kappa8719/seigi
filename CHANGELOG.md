@@ -1,4 +1,4 @@
-## [unreleased]
+## [0.1.1] - 2025-10-05
 
 ### 🚀 Features
 
@@ -17,3 +17,8 @@
 - Make seigi_toast workspace dependency
 - Dependencies
 - *(demo)* Separate demo crate from workspace
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and add cliff.toml
+- Bump version
