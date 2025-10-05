@@ -13,7 +13,7 @@ members = ["seigi_*"]
 
 [workspace.dependencies]
 seigi_toast = { path = "seigi_toast", version = "0.1.0 "}
-web-sys = { version = "0.3", features = ["Document", "Window", "PopStateEvent", "HtmlAnchorElement", "NodeList", "CssStyleDeclaration", "ViewTransition", "HtmlStyleElement", "Text"] }
+web-sys = { version = "0.3", features = ["Document", "Window", "PopStateEvent", "HtmlAnchorElement", "NodeList", "CssStyleDeclaration", "ViewTransition", "HtmlStyleElement", "Text", "ResizeObserver"] }
 js-sys = "0.3"
 wasm-bindgen = "0.2"
 gloo = "0.11.0"
