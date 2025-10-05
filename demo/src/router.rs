@@ -13,9 +13,8 @@ pub fn initialize() {
 
     EventListener::new_with_options(window().unchecked_ref(), "popstate", options, |event| {
         let event = event.dyn_ref::<PopStateEvent>().unwrap();
-        let location = document().location().unwrap();
-        let path = location.pathname().unwrap();
-        update_route_transitioning(path.as_str());
+        let pathname = get_pathname();
+        update_route_transitioning(pathname.as_str());
     })
     .forget();
 
@@ -42,6 +41,13 @@ pub fn initialize() {
         update_route_transitioning(pathname.as_str());
     })
     .forget();
+
+    update_route(get_pathname().as_str());
+}
+
+fn get_pathname() -> String {
+    let location = document().location().unwrap();
+    location.pathname().unwrap()
 }
 
 fn update_route_transitioning(url: &str) {
