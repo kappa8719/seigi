@@ -5,8 +5,10 @@ use std::{
         Arc,
         atomic::{AtomicU64, Ordering},
     },
+    time::Duration,
 };
 
+use gloo::timers::callback::Timeout;
 use parking_lot::{MappedMutexGuard, Mutex, MutexGuard, RwLock};
 
 use crate::{Toast, ToastHandle};
@@ -60,17 +62,48 @@ impl Observer {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct ToasterOptions {
+    timeout: Option<Duration>,
+}
+
+impl ToasterOptions {
+    pub fn with_timeout(mut self, duration: Duration) -> Self {
+        self.timeout = Some(duration);
+        self
+    }
+
+    pub fn with_timeout_secs(self, secs: f64) -> Self {
+        self.with_timeout(Duration::from_secs_f64(secs))
+    }
+
+    pub fn without_timeout(mut self) -> Self {
+        self.timeout = None;
+        self
+    }
+}
+
+impl Default for ToasterOptions {
+    fn default() -> Self {
+        Self {
+            timeout: Some(Duration::from_secs(4)),
+        }
+    }
+}
+
 #[derive(Clone)]
 pub struct Toaster {
     state: Arc<Mutex<State>>,
     observer: Rc<RwLock<Observer>>,
+    options: Arc<ToasterOptions>,
 }
 
 impl Toaster {
-    pub fn new() -> Toaster {
+    pub fn new(options: ToasterOptions) -> Toaster {
         Self {
             state: Arc::new(Mutex::new(State::new())),
             observer: Rc::new(RwLock::new(Observer::default())),
+            options: Arc::new(options),
         }
     }
 
@@ -87,6 +120,22 @@ impl Toaster {
         let mut state = self.state.lock();
         let handle = ToastHandle(state.sequence);
         state.sequence += 1;
+
+        let timeout = match toast.timeout {
+            crate::ToastTimeout::None => None,
+            crate::ToastTimeout::Default => self.options.timeout,
+            crate::ToastTimeout::Duration(duration) => Some(duration),
+        };
+
+        if let Some(timeout) = timeout {
+            Timeout::new(timeout.as_millis() as u32, {
+                let this = self.clone();
+                move || {
+                    this.dismiss_toast(handle, DismissReason::Timeout);
+                }
+            })
+            .forget();
+        }
 
         state.toasts.insert(handle, toast);
         drop(state);
@@ -134,7 +183,7 @@ impl Toaster {
 
 impl Default for Toaster {
     fn default() -> Self {
-        Self::new()
+        Self::new(ToasterOptions::default())
     }
 }
 

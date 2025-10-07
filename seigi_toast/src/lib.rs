@@ -12,7 +12,7 @@ use web_sys::{HtmlElement, HtmlStyleElement};
 use crate::renderer::{RendererOptions, create_renderer};
 
 thread_local! {
-    static GLOBAL_TOASTS: OnceCell<Toaster> = OnceCell::new();
+    static GLOBAL_TOASTS: OnceCell<Toaster> = const { OnceCell::new() };
 }
 
 fn global() -> Toaster {
@@ -20,9 +20,9 @@ fn global() -> Toaster {
 }
 
 /// Initialize styles and global
-pub fn initialize() {
+pub fn initialize(options: ToasterOptions) {
     initialize_styles();
-    initialize_global();
+    initialize_global(options);
 }
 
 /// Add default stylesheet to document head
@@ -41,10 +41,10 @@ pub fn initialize_styles() {
 }
 
 /// Initialize global state and renderer
-pub fn initialize_global() {
+pub fn initialize_global(options: ToasterOptions) {
     // Initialize global state
     GLOBAL_TOASTS.with(|cell| {
-        let toaster = Toaster::new();
+        let toaster = Toaster::new(options);
         cell.get_or_init(|| toaster.clone());
 
         let container = document()
