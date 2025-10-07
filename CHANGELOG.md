@@ -1,3 +1,13 @@
+## [0.2.0] - 2025-10-07
+
+### 🚀 Features
+
+- *(toast)* Add timeout api and update demo
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog
+- *(demo)* Bacon-ls overrides
 ## [0.1.1] - 2025-10-05
 
 ### 🚀 Features
