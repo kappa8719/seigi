@@ -1,0 +1,30 @@
+[exports.locations]
+auto = false
+exporter = "locations"
+path = ".bacon-locations"
+line_format = "{kind} {path}:{line}:{column} {message}"
+
+[sound]
+enabled = false
+base_volume = "100%"
+
+[jobs.bacon-ls]
+command = [
+  "cargo", "clippy", "--target=wasm32-unknown-unknown",
+  "--message-format", "json-diagnostic-rendered-ansi",
+]
+analyzer = "cargo_json"
+need_stdout = true
+
+[jobs.bacon-ls.env]
+CARGO_TARGET_DIR = "./target/bacon-ls"
+
+[exports.cargo-json-spans]
+auto = true
+exporter = "analyzer"
+line_format = """\
+  {diagnostic.level}|:|{span.file_name}|:|{span.line_start}|:|{span.line_end}|:|\
+  {span.column_start}|:|{span.column_end}|:|{diagnostic.message}|:|{diagnostic.rendered}|:|\
+  {span.suggested_replacement}\
+"""
+path = ".bacon-locations"
