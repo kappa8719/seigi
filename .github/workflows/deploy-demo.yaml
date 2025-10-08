@@ -1,0 +1,63 @@
+name: Deploy demo to Github Pages
+
+on:
+  push:
+    branches: [main]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Setup toolchains
+        run: |
+          rustup override set nightly
+          rustup target add wasm32-unknown-unknown
+          rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
+      - uses: cargo-bins/cargo-binstall@main
+      - name: Install build tools
+        run: cargo binstall trunk
+      - name: Build
+        run: |
+          cd demo
+          cargo build --target=wasm32-unknown-unknown --manifest-path=./Cargo.toml
+          trunk build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: demo/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
