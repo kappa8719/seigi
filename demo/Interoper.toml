@@ -1,3 +1,4 @@
 [dependencies]
 daisyui = "latest"
 tailwindcss = "4.1.13"
+"@tailwindcss/typography" = "latest"
