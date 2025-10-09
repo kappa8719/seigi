@@ -13,11 +13,12 @@
   </head>
   <body>
     <div class="flex">
-      <div class="w-64 p-4 shadow-lg h-dvh">
+      <div class="w-64 p-4 shadow-lg h-dvh flex flex-col gap-4">
         <a href="/toasts" class="btn btn-wide shadow-sm">Toasts</a>
+        <a href="/focus" class="btn btn-wide shadow-sm">Focus Management</a>
       </div>
 
-      <div class="render">
+      <div class="render flex-1">
         <div data-route="/toasts" class="p-4">
           <button id="toast.create" class="btn btn-primary">
             Create a toast
@@ -25,6 +26,50 @@
           <button id="toast.dismiss" class="btn btn-warning">
             Dismiss created toast
           </button>
+        </div>
+
+        <div data-route="/focus" class="p-4 flex flex-col gap-4">
+          <h2 class="text-2xl font-semibold">Default</h2>
+          <button id="focus.trap.default.activate" class="btn btn-wide">
+            Activate Trap
+          </button>
+          <div
+            id="focus.trap.default"
+            class="card bg-base-100 shadow-sm w-48 group data-seigi-trap-active:card-border"
+          >
+            <div class="card-body">
+              <div class="card-title">
+                Trap
+                <span
+                  class="status status-success group-data-[seigi-trap-active]:visible invisible"
+                ></span>
+              </div>
+              <a href="#">Anchor</a>
+              <button class="btn">Button</button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h2 class="text-2xl font-semibold">Deactivate with escape key</h2>
+          <button id="focus.trap.esc.activate" class="btn btn-wide">
+            Activate Trap
+          </button>
+          <div
+            id="focus.trap.esc"
+            class="card bg-base-100 shadow-sm w-48 group data-seigi-trap-active:card-border"
+          >
+            <div class="card-body">
+              <div class="card-title">
+                Trap
+                <span
+                  class="status status-success group-data-[seigi-trap-active]:visible invisible"
+                ></span>
+              </div>
+              <a href="#">Anchor</a>
+              <button class="btn">Button</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
