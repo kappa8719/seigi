@@ -8,4 +8,7 @@ homepage = "https://github.com/kappa8719/seigi/seigi_focus"
 repository = "httsps://github.com/kappa8719/seigi"
 
 [dependencies]
-
+web-sys.workspace = true
+js-sys.workspace = true
+wasm-bindgen.workspace = true
+gloo.workspace = true
