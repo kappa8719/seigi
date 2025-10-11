@@ -46,6 +46,12 @@ fn schedule_focus(target: HtmlElement) {
     .forget();
 }
 
+fn target(event: &Event) -> Option<HtmlElement> {
+    event
+        .target()
+        .and_then(|v| v.dyn_into::<HtmlElement>().ok())
+}
+
 struct Callback(Closure<dyn FnMut(&Event)>);
 
 impl Callback {
@@ -223,11 +229,7 @@ impl State {
     }
 
     fn handle_focus_in(&mut self, event: &FocusEvent) {
-        let Some(target) = event.target() else {
-            return;
-        };
-
-        let Ok(target) = target.dyn_into::<HtmlElement>() else {
+        let Some(target) = target(event.unchecked_ref()) else {
             return;
         };
 
@@ -243,12 +245,25 @@ impl State {
         }
     }
 
-    fn handle_pointer_down(&mut self, _event: &Event) {
-        // TODO
+    fn handle_pointer_down(&mut self, event: &Event) {
+        let Some(target) = target(event) else {
+            return;
+        };
+
+        if !self.options.target.contains(Some(&target)) {
+            event.prevent_default();
+        }
     }
 
-    fn handle_click(&mut self, _event: &MouseEvent) {
-        // TODO
+    fn handle_click(&mut self, event: &MouseEvent) {
+        let Some(target) = target(event.unchecked_ref()) else {
+            return;
+        };
+
+        if !self.options.target.contains(Some(&target)) {
+            event.prevent_default();
+            event.stop_immediate_propagation();
+        }
     }
 
     fn handle_key_down(&mut self, event: &KeyboardEvent) {
