@@ -17,7 +17,12 @@ fn initialize_trap(activate_selector: &str, target_selector: &str) {
         .unwrap()
         .unwrap();
 
-    let trap = seigi::focus::create_focus_trap(FocusTrapOptions::new(target.clone()));
+    let trap = seigi::focus::create(FocusTrapOptions {
+        return_focus: true,
+        initial_focus: seigi::focus::InitialFocus::Auto,
+        deactivate_on_escape: true,
+        target: target.clone().unchecked_into(),
+    });
 
     EventListener::new(activate.clone().unchecked_ref(), "click", move |event| {
         if trap.is_activated() {
