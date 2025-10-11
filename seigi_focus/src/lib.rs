@@ -69,12 +69,20 @@ pub enum InitialFocus {
     Function(Box<dyn Fn() -> HtmlElement>),
 }
 
+#[derive(Default)]
+pub struct FocusTrapHooks {
+    pub activate: Option<Box<dyn Fn()>>,
+    pub deactivate: Option<Box<dyn Fn()>>,
+}
+
 pub struct FocusTrapOptions {
     /// Whether trap should return focus to the last focused element before trap activation
     pub return_focus: bool,
     pub initial_focus: InitialFocus,
     /// Whether trap should deactivate when user press esc
     pub deactivate_on_escape: bool,
+    /// The hooks
+    pub hooks: FocusTrapHooks,
     /// The element focus trap is attached to
     pub target: HtmlElement,
 }
@@ -163,6 +171,10 @@ impl State {
         self.return_element = active_element();
         self.add_listeners();
         self.initial_focus();
+
+        if let Some(hook) = &self.options.hooks.activate {
+            hook();
+        }
     }
 
     fn deactivate(&mut self) {
@@ -173,6 +185,10 @@ impl State {
 
         self.remove_listeners();
         self.return_focus();
+
+        if let Some(hook) = &self.options.hooks.deactivate {
+            hook();
+        }
     }
 
     fn initial_focus(&self) {

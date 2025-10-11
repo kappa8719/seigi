@@ -1,5 +1,8 @@
 use gloo::{events::EventListener, utils::document};
-use seigi::focus::FocusTrapOptions;
+use seigi::{
+    focus::{FocusTrapHooks, FocusTrapOptions},
+    toast::Toast,
+};
 use wasm_bindgen::JsCast;
 
 use crate::escape_selector;
@@ -21,6 +24,14 @@ fn initialize_trap(activate_selector: &str, target_selector: &str) {
         return_focus: true,
         initial_focus: seigi::focus::InitialFocus::Auto,
         deactivate_on_escape: true,
+        hooks: FocusTrapHooks {
+            activate: Some(Box::new(|| {
+                seigi::toast::create_toast(Toast::builder().title("Activated").build());
+            })),
+            deactivate: Some(Box::new(|| {
+                seigi::toast::create_toast(Toast::builder().title("Deactivated").build());
+            })),
+        },
         target: target.clone().unchecked_into(),
     });
 
