@@ -8,6 +8,7 @@ homepage = "https://github.com/kappa8719/seigi/seigi_form"
 repository = "https://github.com/kappa8719/seigi"
 
 [dependencies]
+seigi_focus.workspace = true
 web-sys.workspace = true
 js-sys.workspace = true
 wasm-bindgen.workspace = true
