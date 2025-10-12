@@ -14,6 +14,7 @@ members = ["seigi_*"]
 [workspace.dependencies]
 seigi_toast = { path = "seigi_toast", version = "0.2.0" }
 seigi_focus = { path = "seigi_focus", version = "0.1.0" }
+seigi_form = { path = "seigi_form", versin = "0.1.0" }
 js-sys = "0.3"
 wasm-bindgen = "0.2"
 gloo = "0.11.0"
@@ -40,3 +41,4 @@ features = [
 [dependencies]
 seigi_toast.workspace = true
 seigi_focus.workspace = true
+seigi_form.workspace = true
