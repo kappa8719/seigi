@@ -16,6 +16,7 @@
       <div class="w-64 p-4 shadow-lg h-dvh flex flex-col gap-4">
         <a href="/toasts" class="btn btn-wide shadow-sm">Toasts</a>
         <a href="/focus" class="btn btn-wide shadow-sm">Focus Management</a>
+        <a href="/forms" class="btn btn-wide shadow-sm">Forms</a>
       </div>
 
       <div class="render flex-1">
@@ -45,7 +46,9 @@
                 ></span>
               </div>
               <a href="#">Anchor</a>
-              <button class="btn">Button</button>
+              <button id="focus.trap.default.deactivate" class="btn">
+                Deactivate
+              </button>
             </div>
           </div>
 
@@ -67,9 +70,50 @@
                 ></span>
               </div>
               <a href="#">Anchor</a>
-              <button class="btn">Button</button>
+              <button id="focus.trap.esc.deactivate" class="btn">
+                Deactivate
+              </button>
             </div>
           </div>
+        </div>
+
+        <div data-route="/forms" class="p-4 flex flex-col gap-4">
+          <h1 class="text-3xl font-semibold">Forms</h1>
+          <h2 class="text-2xl font-semibold">Multi Staged Forms</h2>
+          <h3 class="text-xl">Animated Multi Staged Form</h3>
+          <div
+            id="forms.multi_stage.animated"
+            class="card bg-base-100 w-min min-w-64 shadow-sm"
+          >
+            <div id="forms.multi_stage.animated.1" class="card-body">
+              <div class="card-title justify-center">Stage 1</div>
+              <div class="card-actions">
+                <button class="btn btn-block btn-primary" data-seigi-form-next>
+                  Next
+                </button>
+              </div>
+            </div>
+            <div id="forms.multi_stage.animated.2" class="card-body">
+              <div class="card-title justify-center">Stage 2</div>
+              <div class="card-actions">
+                <button class="btn btn-primary flex-1" data-seigi-form-previous>
+                  Previous
+                </button>
+                <button class="btn btn-primary flex-1" data-seigi-form-next>
+                  Next
+                </button>
+              </div>
+            </div>
+            <div id="forms.multi_stage.animated.3" class="card-body">
+              <div class="card-title justify-center">Stage 3</div>
+              <div class="card-actions">
+                <button class="btn btn-primary flex-1" data-seigi-form-previous>
+                  Previous
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
         </div>
       </div>
     </div>
