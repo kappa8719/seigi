@@ -67,8 +67,10 @@ struct Callbacks {
     key_down: Callback,
 }
 
+#[derive(Default)]
 pub enum InitialFocus {
     None,
+    #[default]
     Auto,
     Selector(String),
     Element(HtmlElement),
@@ -306,6 +308,14 @@ impl State {
     }
 }
 
+impl Drop for State {
+    fn drop(&mut self) {
+        // Clean up listeners so there are no dangling listeners pointing to dropped rust closures
+        self.remove_listeners();
+    }
+}
+
+#[derive(Clone)]
 pub struct FocusTrap {
     state: Rc<Mutex<State>>,
 }
