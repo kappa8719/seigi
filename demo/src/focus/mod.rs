@@ -58,6 +58,7 @@ fn initialize_trap(
                 }
             })),
         },
+        scope: document().unchecked_into(),
         target: target.clone().unchecked_into(),
     });
 
