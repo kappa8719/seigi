@@ -13,5 +13,5 @@ fn build_interoper() {
         }
     };
 
-    project.build_templates("./styles/src", "./styles/generated");
+    let _ = project.build_templates("./styles/src", "./styles/generated");
 }
