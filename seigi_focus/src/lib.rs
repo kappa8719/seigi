@@ -7,7 +7,10 @@ use std::{
     sync::{Mutex, MutexGuard},
 };
 
-use gloo::{timers::callback::Timeout, utils::document};
+use gloo::{
+    timers::callback::Timeout,
+    utils::{body, document},
+};
 use js_sys::Function;
 use wasm_bindgen::{JsCast, prelude::Closure};
 use web_sys::{AddEventListenerOptions, Event, FocusEvent, HtmlElement, KeyboardEvent, MouseEvent};
@@ -32,13 +35,14 @@ fn acquired<T, R>(weak: &Weak<Mutex<T>>, mut f: impl FnMut(MutexGuard<'_, T>) ->
     f(state)
 }
 
+/// Gets document.activeElement
 fn active_element() -> Option<HtmlElement> {
     document()
         .active_element()
         .and_then(|v| v.dyn_into::<HtmlElement>().ok())
 }
 
-/// Set immediate timeout(0ms) for focusing given element
+/// Sets immediate timeout(0ms) for focusing given element
 fn schedule_focus(target: HtmlElement) {
     Timeout::new(0, move || {
         let _ = target.focus();
@@ -46,6 +50,7 @@ fn schedule_focus(target: HtmlElement) {
     .forget();
 }
 
+/// Gets the target of Event as HtmlElement
 fn target(event: &Event) -> Option<HtmlElement> {
     event
         .target()
@@ -67,22 +72,32 @@ struct Callbacks {
     key_down: Callback,
 }
 
+/// The method trap will use to decide the initial focus element
 #[derive(Default)]
 pub enum InitialFocus {
+    /// The trap doesn't do initial focus
     None,
+    /// The trap focuses the first focusable element inside the trap
     #[default]
     Auto,
+    /// The trap focuses the first element that matches given selector inside the trap
     Selector(String),
+    /// The trap focuses given element
     Element(HtmlElement),
+    /// The trap focuses returned element by the function
     Function(Box<dyn Fn() -> HtmlElement>),
 }
 
+/// Hooks to [FocusTrap]
 #[derive(Default)]
 pub struct FocusTrapHooks {
+    /// Called when the trap is activated
     pub activate: Option<Box<dyn Fn()>>,
+    /// Called when the trap is deactivated
     pub deactivate: Option<Box<dyn Fn()>>,
 }
 
+/// Options of [FocusTrap]
 pub struct FocusTrapOptions {
     /// Whether trap should return focus to the last focused element before trap activation
     pub return_focus: bool,
@@ -91,8 +106,94 @@ pub struct FocusTrapOptions {
     pub deactivate_on_escape: bool,
     /// The hooks
     pub hooks: FocusTrapHooks,
+    /// The scope trap is affected.
+    ///
+    /// Elements outside the scope are not affected by the trap
+    pub scope: HtmlElement,
     /// The element focus trap is attached to
     pub target: HtmlElement,
+}
+
+impl FocusTrapOptions {
+    pub fn builder() -> FocusTrapOptionsBuilder {
+        FocusTrapOptionsBuilder::new()
+    }
+}
+
+/// A builder struct of [FocusTrapOptions]
+pub struct FocusTrapOptionsBuilder {
+    return_focus: bool,
+    initial_focus: InitialFocus,
+    deactivate_on_escape: bool,
+    hooks: FocusTrapHooks,
+    scope: HtmlElement,
+    target: Option<HtmlElement>,
+}
+
+impl Default for FocusTrapOptionsBuilder {
+    fn default() -> Self {
+        Self {
+            return_focus: true,
+            initial_focus: InitialFocus::default(),
+            deactivate_on_escape: false,
+            hooks: FocusTrapHooks::default(),
+            scope: body(),
+            target: None,
+        }
+    }
+}
+
+impl FocusTrapOptionsBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn return_focus(mut self, return_focus: bool) -> Self {
+        self.return_focus = return_focus;
+        self
+    }
+
+    pub fn initial_focus(mut self, initial_focus: InitialFocus) -> Self {
+        self.initial_focus = initial_focus;
+        self
+    }
+
+    pub fn deactivate_on_escape(mut self, deactivate_on_escape: bool) -> Self {
+        self.deactivate_on_escape = deactivate_on_escape;
+        self
+    }
+
+    pub fn hooks(mut self, hooks: FocusTrapHooks) -> Self {
+        self.hooks = hooks;
+        self
+    }
+
+    pub fn scope(mut self, scope: HtmlElement) -> Self {
+        self.scope = scope;
+        self
+    }
+
+    pub fn target(mut self, target: HtmlElement) -> Self {
+        self.target = Some(target);
+        self
+    }
+
+    /// Builds into [FocusTrapOptions]
+    ///
+    /// # Panics
+    /// This method panics if target field is not set
+    pub fn build(self) -> FocusTrapOptions {
+        FocusTrapOptions {
+            return_focus: self.return_focus,
+            initial_focus: self.initial_focus,
+            deactivate_on_escape: self.deactivate_on_escape,
+            hooks: self.hooks,
+            scope: self.scope,
+            target: self
+                .target
+                .expect("target must be set to build FocusTrapOptions"),
+        }
+    }
 }
 
 struct State {
@@ -111,62 +212,66 @@ impl State {
             options
         };
 
-        let _ = document().add_event_listener_with_callback_and_add_event_listener_options(
+        let scope = &self.options.scope;
+
+        let _ = scope.add_event_listener_with_callback_and_add_event_listener_options(
             "focusin",
             self.callbacks.focus_in.as_function(),
             &option_captures,
         );
-        let _ = document().add_event_listener_with_callback_and_add_event_listener_options(
+        let _ = scope.add_event_listener_with_callback_and_add_event_listener_options(
             "mousedown",
             self.callbacks.pointer_down.as_function(),
             &option_captures,
         );
-        let _ = document().add_event_listener_with_callback_and_add_event_listener_options(
+        let _ = scope.add_event_listener_with_callback_and_add_event_listener_options(
             "touchstart",
             self.callbacks.pointer_down.as_function(),
             &option_captures,
         );
-        let _ = document().add_event_listener_with_callback_and_add_event_listener_options(
+        let _ = scope.add_event_listener_with_callback_and_add_event_listener_options(
             "click",
             self.callbacks.click.as_function(),
             &option_captures,
         );
-        let _ = document().add_event_listener_with_callback_and_add_event_listener_options(
+        let _ = scope.add_event_listener_with_callback_and_add_event_listener_options(
             "keydown",
             self.callbacks.key_down.as_function(),
             &option_captures,
         );
-        let _ = document()
+        let _ = scope
             .add_event_listener_with_callback("keydown", self.callbacks.key_down.as_function());
     }
 
     fn remove_listeners(&mut self) {
-        let _ = document().remove_event_listener_with_callback_and_bool(
+        let scope = &self.options.scope;
+
+        let _ = scope.remove_event_listener_with_callback_and_bool(
             "focusin",
             self.callbacks.focus_in.as_function(),
             true,
         );
-        let _ = document().remove_event_listener_with_callback_and_bool(
+        let _ = scope.remove_event_listener_with_callback_and_bool(
             "mousedown",
             self.callbacks.pointer_down.as_function(),
             true,
         );
-        let _ = document().remove_event_listener_with_callback_and_bool(
+        let _ = scope.remove_event_listener_with_callback_and_bool(
             "touchstart",
             self.callbacks.pointer_down.as_function(),
             true,
         );
-        let _ = document().remove_event_listener_with_callback_and_bool(
+        let _ = scope.remove_event_listener_with_callback_and_bool(
             "click",
             self.callbacks.click.as_function(),
             true,
         );
-        let _ = document().remove_event_listener_with_callback_and_bool(
+        let _ = scope.remove_event_listener_with_callback_and_bool(
             "keydown",
             self.callbacks.key_down.as_function(),
             true,
         );
-        let _ = document()
+        let _ = scope
             .remove_event_listener_with_callback("keydown", self.callbacks.key_down.as_function());
     }
 
@@ -275,29 +380,64 @@ impl State {
             };
             let target = target.unchecked_ref::<HtmlElement>();
             let is_backward = event.shift_key();
-            let tab_candidates = candidates::tab_candidates(self.options.target.unchecked_ref());
+
+            let body_tab_candidates = {
+                let container = &self.options.target;
+                let scope = &self.options.scope;
+                candidates::candidates(body().unchecked_ref(), move |v| {
+                    candidates::is_tabbable(v)
+                        && (!scope.contains(Some(v.unchecked_ref()))
+                            || container.contains(Some(v.unchecked_ref())))
+                })
+            };
+            let container_tab_candidates =
+                candidates::tab_candidates(self.options.target.unchecked_ref());
 
             if is_backward {
-                let Some(first) = tab_candidates.first() else {
+                let Some(first) = container_tab_candidates.first() else {
                     event.prevent_default();
                     return;
                 };
 
                 if target == first {
-                    // If there was a first element in vec, then there must be last one too
-                    let last = tab_candidates.last().unwrap();
-                    schedule_focus(last.clone());
+                    let position = body_tab_candidates
+                        .iter()
+                        .position(|v| v == target)
+                        .unwrap();
+
+                    if position == 0 {
+                        // If there was a first element in vec, then there must be last one too
+                        let last = body_tab_candidates.last().unwrap();
+                        schedule_focus(last.clone());
+                    } else {
+                        let target = body_tab_candidates
+                            .get(position - 1)
+                            .unwrap_or_else(|| body_tab_candidates.last().unwrap());
+                        schedule_focus(target.clone());
+                    }
                     event.prevent_default();
                 }
             } else {
-                let Some(last) = tab_candidates.last() else {
+                let Some(last) = container_tab_candidates.last() else {
                     event.prevent_default();
                     return;
                 };
 
                 if target == last {
-                    let first = tab_candidates.first().unwrap();
-                    schedule_focus(first.clone());
+                    let position = body_tab_candidates
+                        .iter()
+                        .position(|v| v == target)
+                        .unwrap();
+
+                    if position == body_tab_candidates.len() {
+                        let first = container_tab_candidates.first().unwrap();
+                        schedule_focus(first.clone());
+                    } else {
+                        let target = body_tab_candidates
+                            .get(position + 1)
+                            .unwrap_or_else(|| body_tab_candidates.first().unwrap());
+                        schedule_focus(target.clone());
+                    }
                     event.prevent_default();
                 }
             }
@@ -315,12 +455,24 @@ impl Drop for State {
     }
 }
 
+/// An instance of focus trap.
+///
+/// This struct contains a handle(Rc) to actual state.
+///
+/// Dropping this struct would also unregister all event listeners the trap has attached
 #[derive(Clone)]
 pub struct FocusTrap {
     state: Rc<Mutex<State>>,
 }
 
 impl FocusTrap {
+    /// Returns the handle to options that were used to construct the trap
+    ///
+    /// This function locks the state
+    pub fn options(&self) -> Rc<FocusTrapOptions> {
+        self.state.lock().unwrap().options.clone()
+    }
+
     /// Return true if the trap is activated
     ///
     /// This function locks the state
