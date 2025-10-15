@@ -1,3 +1,5 @@
+//! Ready-to-use global toasts with predefined styles
+
 mod renderer;
 mod toast;
 mod toaster;
