@@ -24,29 +24,9 @@ fn is_disabled(element: &Element) -> bool {
     false
 }
 
+/// Check if an element itself or any of its ancesters is inert
 fn is_inert(element: &Element) -> bool {
-    if let Some(inert) = element.get_attribute("inert") {
-        return inert == "true";
-    }
-
-    false
-}
-
-fn has_inert_ancestor(element: &Element) -> bool {
-    let Some(mut current) = element.parent_element() else {
-        return false;
-    };
-    loop {
-        if is_inert(element) {
-            return true;
-        }
-
-        if let Some(parent) = current.parent_element() {
-            current = parent;
-        } else {
-            return false;
-        }
-    }
+    element.closest("[inert]").ok().flatten().is_some()
 }
 
 fn is_hidden_input(element: &Element) -> bool {
@@ -61,11 +41,7 @@ fn is_hidden_input(element: &Element) -> bool {
 }
 
 pub fn is_focusable(element: &HtmlElement) -> bool {
-    if is_disabled(element)
-        || is_inert(element)
-        || has_inert_ancestor(element)
-        || is_hidden_input(element)
-    {
+    if is_disabled(element) || is_inert(element) || is_hidden_input(element) {
         return false;
     }
 
