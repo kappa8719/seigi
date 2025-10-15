@@ -1,15 +1,15 @@
 [package]
 name = "seigi_toast"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
-license = "MIT"
 description = "Unstyled toast components for web"
 homepage = "https://github.com/kappa8719/seigi/seigi_toast"
 repository = "https://github.com/kappa8719/seigi"
+license = "MIT"
 
 [dependencies]
-web-sys.workspace = true
-js-sys.workspace = true
-wasm-bindgen.workspace = true
 gloo.workspace = true
+js-sys.workspace = true
 parking_lot = { version = "0.12.5", features = ["nightly"] }
+wasm-bindgen.workspace = true
+web-sys.workspace = true

@@ -1,0 +1,18 @@
+[git]
+commit_parsers = [
+  { message = "^feat", group = "<!-- 0 -->🚀 Features", scope = "focus" },
+  { message = "^fix", group = "<!-- 1 -->🐛 Bug Fixes", scope = "focus" },
+  { message = "^doc", group = "<!-- 3 -->📚 Documentation", scope = "focus" },
+  { message = "^perf", group = "<!-- 4 -->⚡ Performance", scope = "focus" },
+  { message = "^refactor", group = "<!-- 2 -->🚜 Refactor", scope = "focus" },
+  { message = "^style", group = "<!-- 5 -->🎨 Styling", scope = "focus" },
+  { message = "^test", group = "<!-- 6 -->🧪 Testing", scope = "focus" },
+  { message = "^chore\\(release\\): prepare for", skip = true, scope = "focus" },
+  { message = "^chore\\(deps.*\\)", skip = true, scope = "focus" },
+  { message = "^chore\\(pr\\)", skip = true, scope = "focus" },
+  { message = "^chore\\(pull\\)", skip = true, scope = "focus" },
+  { message = "^chore|^ci", group = "<!-- 7 -->⚙️ Miscellaneous Tasks", scope = "focus" },
+  { body = ".*security", group = "<!-- 8 -->🛡️ Security", scope = "focus" },
+  { message = "^revert", group = "<!-- 9 -->◀️ Revert", scope = "focus" },
+  { message = ".*", group = "<!-- 10 -->💼 Other", scope = "focus" },
+]

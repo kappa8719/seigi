@@ -1,0 +1,18 @@
+[git]
+commit_parsers = [
+  { message = "^feat", group = "<!-- 0 -->🚀 Features", scope = "demo" },
+  { message = "^fix", group = "<!-- 1 -->🐛 Bug Fixes", scope = "demo" },
+  { message = "^doc", group = "<!-- 3 -->📚 Documentation", scope = "demo" },
+  { message = "^perf", group = "<!-- 4 -->⚡ Performance", scope = "demo" },
+  { message = "^refactor", group = "<!-- 2 -->🚜 Refactor", scope = "demo" },
+  { message = "^style", group = "<!-- 5 -->🎨 Styling", scope = "demo" },
+  { message = "^test", group = "<!-- 6 -->🧪 Testing", scope = "demo" },
+  { message = "^chore\\(release\\): prepare for", skip = true, scope = "demo" },
+  { message = "^chore\\(deps.*\\)", skip = true, scope = "demo" },
+  { message = "^chore\\(pr\\)", skip = true, scope = "demo" },
+  { message = "^chore\\(pull\\)", skip = true, scope = "demo" },
+  { message = "^chore|^ci", group = "<!-- 7 -->⚙️ Miscellaneous Tasks", scope = "demo" },
+  { body = ".*security", group = "<!-- 8 -->🛡️ Security", scope = "demo" },
+  { message = "^revert", group = "<!-- 9 -->◀️ Revert", scope = "demo" },
+  { message = ".*", group = "<!-- 10 -->💼 Other", scope = "demo" },
+]

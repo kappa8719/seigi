@@ -1,0 +1,18 @@
+[git]
+commit_parsers = [
+  { message = "^feat", group = "<!-- 0 -->🚀 Features", scope = "toast" },
+  { message = "^fix", group = "<!-- 1 -->🐛 Bug Fixes", scope = "toast" },
+  { message = "^doc", group = "<!-- 3 -->📚 Documentation", scope = "toast" },
+  { message = "^perf", group = "<!-- 4 -->⚡ Performance", scope = "toast" },
+  { message = "^refactor", group = "<!-- 2 -->🚜 Refactor", scope = "toast" },
+  { message = "^style", group = "<!-- 5 -->🎨 Styling", scope = "toast" },
+  { message = "^test", group = "<!-- 6 -->🧪 Testing", scope = "toast" },
+  { message = "^chore\\(release\\): prepare for", skip = true, scope = "toast" },
+  { message = "^chore\\(deps.*\\)", skip = true, scope = "toast" },
+  { message = "^chore\\(pr\\)", skip = true, scope = "toast" },
+  { message = "^chore\\(pull\\)", skip = true, scope = "toast" },
+  { message = "^chore|^ci", group = "<!-- 7 -->⚙️ Miscellaneous Tasks", scope = "toast" },
+  { body = ".*security", group = "<!-- 8 -->🛡️ Security", scope = "toast" },
+  { message = "^revert", group = "<!-- 9 -->◀️ Revert", scope = "toast" },
+  { message = ".*", group = "<!-- 10 -->💼 Other", scope = "toast" },
+]

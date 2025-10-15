@@ -1,34 +1,101 @@
-## [0.2.0] - 2025-10-07
+## 0.3.0 - 2025-10-15
 
-### 🚀 Features
+### <!-- 0 -->🚀 Features
 
-- *(toast)* Add timeout api and update demo
+#### Demo
 
-### ⚙️ Miscellaneous Tasks
+- Add animated multi staged form demo
 
-- Update changelog
-- *(demo)* Bacon-ls overrides
-## [0.1.1] - 2025-10-05
+#### Focus
 
-### 🚀 Features
+- Add activate/deactivate hooks
+- Add scoped traps and improve docs of public items
 
-- *(toast)* Base toast backends
-- *(toast)* Renderer prototype and api rework
-- *(toast)* First prototype and update internals
-- *(demo)* Finish toast create/dismiss demo
-- Update dependencies
+#### Form
 
-### 🐛 Bug Fixes
+- Final prototype with improved docs
 
-- *(demo)* Fix router not recognizing path at first
+### <!-- 1 -->🐛 Bug Fixes
 
-### 🚜 Refactor
+#### Demo
 
-- Make seigi_toast workspace dependency
-- Dependencies
-- *(demo)* Separate demo crate from workspace
+- Add scope field when creating focus trap
 
-### ⚙️ Miscellaneous Tasks
+#### Focus
 
-- Update changelog and add cliff.toml
-- Bump version
+- Remove listeners when focus trap state drops
+
+### <!-- 2 -->🚜 Refactor
+
+#### Focus
+
+- Update internal architecture and options api
+
+### <!-- 4 -->⚡ Performance
+
+#### Focus
+
+- Use Element.closest on is_inert to reduce queries
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+
+#### Demo
+
+- Add @tailwindcss/typography as interoper dependency
+- Add demo for focus traps
+- Fix focus demo and add animated multi staged form demo
+
+#### Focus
+
+- Add pointer_down and click handling
+
+#### Form
+
+- Multi stage form basis
+
+#### Toast
+
+- Add crate doc of description of the crate
+
+## 0.2.0 - 2025-10-07
+
+### <!-- 0 -->🚀 Features
+
+#### Toast
+
+- Add timeout api and update demo
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+
+#### Demo
+
+- Bacon-ls overrides
+
+## 0.1.1 - 2025-10-05
+
+### <!-- 0 -->🚀 Features
+
+#### Demo
+
+- Finish toast create/dismiss demo
+
+#### Toast
+
+- Base toast backends
+- Renderer prototype and api rework
+- First prototype and update internals
+
+### <!-- 1 -->🐛 Bug Fixes
+
+#### Demo
+
+- Fix router not recognizing path at first
+
+### <!-- 2 -->🚜 Refactor
+
+#### Demo
+
+- Separate demo crate from workspace
+
+### <!-- 7 -->⚙️ Miscellaneous Tasks
+
