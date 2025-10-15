@@ -91,8 +91,10 @@ fn update_route(url: &str) -> anyhow::Result<()> {
         let active = route == url;
         if active {
             let _ = element.set_attribute("data-route-active", "");
+            let _ = element.remove_attribute("inert");
         } else {
             let _ = element.remove_attribute("data-route-active");
+            let _ = element.set_attribute("inert", "");
         }
     }
 

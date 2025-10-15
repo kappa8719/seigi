@@ -9,6 +9,7 @@ use crate::query_selector;
 
 pub fn initialize() {
     let form = seigi::form::multi_stage::Form::builder()
+        .container(query_selector("#forms.multi_stage.animated").unwrap())
         .stage(Stage::from_container(
             query_selector("#forms.multi_stage.animated.1").unwrap(),
         ))

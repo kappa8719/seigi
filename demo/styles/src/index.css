@@ -1,4 +1,6 @@
 @import "./router.css";
+@import "./forms.css";
+
 @import "{{ interoper:tailwindcss }}";
 @plugin "{{ interoper:@tailwindcss/typography }}";
 @plugin "{{ interoper:daisyui }}";
