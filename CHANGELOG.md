@@ -52,6 +52,7 @@
 #### Focus
 
 - Add pointer_down and click handling
+- Fix repository url typo error
 
 #### Form
 

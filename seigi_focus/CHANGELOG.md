@@ -22,3 +22,4 @@
 
 - *(focus)* Add minimum viable focus trap prototype
 - *(focus)* Add pointer_down and click handling
+- *(focus)* Fix repository url typo error
