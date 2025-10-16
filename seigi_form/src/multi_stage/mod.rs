@@ -74,6 +74,7 @@ impl Inner {
 
     fn update_meta(&mut self) {
         let stage = &self.stages[self.current].container;
+
         let _ = self.container.set_attribute(
             "data-seigi-form-width",
             stage.offset_width().to_string().as_str(),
@@ -81,6 +82,14 @@ impl Inner {
         let _ = self.container.set_attribute(
             "data-seigi-form-height",
             stage.offset_height().to_string().as_str(),
+        );
+        let _ = self.container.set_attribute(
+            "data-seigi-form-offset-x",
+            (stage.offset_left()).to_string().as_str(),
+        );
+        let _ = self.container.set_attribute(
+            "data-seigi-form-offset-y",
+            (stage.offset_top()).to_string().as_str(),
         );
     }
 
@@ -136,6 +145,12 @@ impl Inner {
 ///
 /// **data-seigi-form-height** is set in the root container to the height of current stage container
 /// in px
+///
+/// **data-seigi-form-offset-x** is set in the root container to the sum of widths of previous
+/// stages
+///
+/// **data-seigi-form-offset-y** is set in the root container to the sum of heights of previous
+/// stages
 ///
 /// **data-seigi-stage-relative** is set in the each stage containers to the relative index from
 /// current stage. For example, a stage currently active has this value of 0, the previous one is
