@@ -2,21 +2,25 @@
   width: attr(data-seigi-form-width px);
   height: attr(data-seigi-form-height px);
   transition:
-    width,
-    height cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
+    width var(--form-timing-function),
+    height var(--form-timing-function);
+  --form-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
+  --form-translate-x: calc(-1 * attr(data-seigi-form-offset-x px));
 }
 
-.form-layer {
+.form-clip {
   width: 100%;
   height: 100%;
   clip-path: inset(0 round var(--radius-box));
+  white-space: nowrap;
+}
+
+.form-container {
+  transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
+  transform: translateX(var(--form-translate-x));
 }
 
 .stage {
   min-width: 12rem;
-  transition: transform cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s;
-  position: absolute;
-  transform: translate(
-    calc(100% * attr(data-seigi-stage-relative type(<number>)))
-  );
+  display: inline-block;
 }
