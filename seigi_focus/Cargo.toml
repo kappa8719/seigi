@@ -4,7 +4,7 @@ version = "0.3.0"
 edition = "2024"
 description = "Low overhead focus management"
 homepage = "https://github.com/kappa8719/seigi/seigi_focus"
-repository = "httsps://github.com/kappa8719/seigi"
+repository = "https://github.com/kappa8719/seigi"
 license = "MIT"
 
 [dependencies]
