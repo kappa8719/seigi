@@ -1,4 +1,4 @@
-## 0.3.0 - 2025-10-15
+## 0.3.0 - 2025-10-16
 
 ### <!-- 0 -->🚀 Features
 
@@ -14,12 +14,15 @@
 #### Form
 
 - Final prototype with improved docs
+- Implement data-seigi-form-offset-* attributes
 
 ### <!-- 1 -->🐛 Bug Fixes
 
 #### Demo
 
 - Add scope field when creating focus trap
+- Update form api calls
+- Fix animated multi stage form translate error
 
 #### Focus
 
@@ -44,6 +47,7 @@
 - Add @tailwindcss/typography as interoper dependency
 - Add demo for focus traps
 - Fix focus demo and add animated multi staged form demo
+- Explicitly ignore interoper build result
 
 #### Focus
 
