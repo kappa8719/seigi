@@ -51,6 +51,20 @@ pub fn initialize() {
         .forget();
     }
 
+    EventListener::new(
+        query_selector("#forms.multi_stage.animated.toggle")
+            .unwrap()
+            .unchecked_ref(),
+        "click",
+        {
+            let form = form.clone();
+            move |_| {
+                form.toggle();
+            }
+        },
+    )
+    .forget();
+
     form.activate();
     forget(form);
 }
