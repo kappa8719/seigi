@@ -119,6 +119,8 @@ impl Inner {
         self.resize_observer
             .observe(self.stages[self.current].container.unchecked_ref());
 
+        let _ = self.container.set_attribute("data-seigi-form-active", "");
+
         self.update_relatives();
     }
 
@@ -131,6 +133,8 @@ impl Inner {
         self.traps.get(self.current).unwrap().deactivate();
         self.resize_observer
             .unobserve(self.stages[self.current].container.unchecked_ref());
+
+        let _ = self.container.remove_attribute("data-seigi-form-active");
     }
 }
 
@@ -140,6 +144,9 @@ impl Inner {
 /// lightweight operation
 ///
 /// # Attributes
+/// **data-seigi-form-active** is set in the root container if the form is activated and removed if
+/// the form is deactivated
+///
 /// **data-seigi-form-width** is set in the root container to the width of current stage container in
 /// px
 ///
