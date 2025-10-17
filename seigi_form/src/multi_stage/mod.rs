@@ -170,6 +170,16 @@ impl Form {
         FormBuilder::new()
     }
 
+    /// Resolve the active state of the form
+    pub fn is_active(&self) -> bool {
+        self.0.lock().unwrap().is_activated
+    }
+
+    /// Resolve the locked state of the form
+    pub fn is_locked(&self) -> bool {
+        self.0.lock().unwrap().is_locked
+    }
+
     /// Updates the current stage to next stage
     pub fn next(&self) {
         let mut inner = self.0.lock().unwrap();
@@ -202,6 +212,18 @@ impl Form {
     /// Deactivate the form
     pub fn deactivate(&self) {
         self.0.lock().unwrap().deactivate();
+    }
+
+    /// Toggle the form
+    ///
+    /// Activate the form if it is deactivated and deactivate the form if it is activated
+    pub fn toggle(&self) {
+        let mut inner = self.0.lock().unwrap();
+        if inner.is_activated {
+            inner.deactivate();
+        } else {
+            inner.activate();
+        }
     }
 }
 
