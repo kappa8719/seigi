@@ -509,7 +509,10 @@ pub fn create(options: FocusTrapOptions) -> FocusTrap {
             state.handle_click(event.unchecked_ref())
         }));
         let key_down = callback!(weak, move |event: &Event| acquired(&weak, |mut state| {
-            state.handle_key_down(event.unchecked_ref())
+            let Some(event) = event.dyn_ref() else {
+                return;
+            };
+            state.handle_key_down(event);
         }));
 
         Mutex::new(State {
