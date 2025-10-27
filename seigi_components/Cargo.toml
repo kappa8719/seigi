@@ -1,0 +1,14 @@
+[package]
+name = "seigi_components"
+version = "0.1.0"
+edition = "2024"
+description = "Library for building Web Components in Rust"
+homepage = "https://github.com/kappa8719/seigi/seigi_components"
+repository = "https://github.com/kappa8719/seigi"
+license = "MIT"
+
+[dependencies]
+wasm-bindgen.workspace = true
+js-sys.workspace = true
+web-sys.workspace = true
+gloo.workspace = true
