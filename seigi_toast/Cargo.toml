@@ -8,8 +8,8 @@ repository = "https://github.com/kappa8719/seigi"
 license = "MIT"
 
 [dependencies]
-gloo.workspace = true
-js-sys.workspace = true
-parking_lot = { version = "0.12.5", features = ["nightly"] }
 wasm-bindgen.workspace = true
 web-sys.workspace = true
+js-sys.workspace = true
+gloo.workspace = true
+parking_lot = { version = "0.12.5", features = ["nightly"] }
