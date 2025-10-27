@@ -204,6 +204,13 @@ impl Form {
         self.0.lock().unwrap().current
     }
 
+    /// Initialize the attributes
+    pub fn initialize(&self) {
+        let mut state = self.0.lock().unwrap();
+        state.update_meta();
+        state.update_relatives();
+    }
+
     /// Activate the form
     pub fn activate(&self) {
         self.0.lock().unwrap().activate();
