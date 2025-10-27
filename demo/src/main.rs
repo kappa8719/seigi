@@ -1,4 +1,4 @@
-use gloo::{console::console_dbg, utils::document};
+use gloo::utils::document;
 use seigi::toast::ToasterOptions;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{HtmlElement, NodeList};
